@@ -12,6 +12,10 @@ facebookId: {
       type: 'string',
       required: true,
       unique: true
+    },
+    workouts: {
+      collection: 'workOut',
+      via: 'User'
     }
     // local            : {
     //     email        : String,

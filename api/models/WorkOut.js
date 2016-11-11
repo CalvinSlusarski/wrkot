@@ -18,6 +18,7 @@ module.exports = {
     //   type: Date, 
     //   defaultTo: Date.now 
     // },
+    owner    : { model: 'User' },
     exercises: {
       collection: 'Exercise',
       via: 'workOut'

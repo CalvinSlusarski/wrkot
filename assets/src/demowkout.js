@@ -15,14 +15,15 @@ export class DemoWkOut{
     this.dialogService = dialogService;
     let that = this;
     $.getJSON('workout').then(function(d){ 
-      console.log(d);
-      console.log(d);
-      console.log(d[5].exercises);
-      console.log(that.theList);
-      that.heading = d.name || '';
-      that.theList = d[5].exercises || [];
-      that.id = d[5]._id;
-      that.workout = d[5];
+      // console.log(d);
+      // console.log(d);
+      // console.log(d[5].exercises);
+      // console.log(that.theList);
+      // that.heading = d.name || '';
+      // that.theList = d[5].exercises || [];
+      // that.id = d[5]._id;
+      // that.workout = d[5];
+      that.theList = d;
      });
   }
 
@@ -38,14 +39,14 @@ export class DemoWkOut{
     this.theList.push(newExercise);
     this.workout.exercises = this.theList;
     console.log(this.workout);
-    $.ajax({
-      type: "PUT",
-      url: 'workout/'+ this.id,
-      data: JSON.stringify(this.workout),
-      dataType: 'json'
-    }).then(function(d) { 
-      console.log(d) 
-    });
+    // $.ajax({
+    //   type: "PUT",
+    //   url: 'workout/'+ this.id,
+    //   data: JSON.stringify(this.workout),
+    //   dataType: 'json'
+    // }).then(function(d) { 
+    //   console.log(d) 
+    // });
   }
   removeExercise = function(item,detail){
     const index = item.details.indexOf(detail);
