@@ -6,9 +6,14 @@
  */
 
 module.exports = {
-
+  //types: {
+  // isProfessor: function(lastName){
+  //   return (this.userType === 'professor' && !lastName)? false: true;
+  // },
+  
   attributes: {
     name: {
+      //required: true,
       type: 'string'
     },
     comment: {
@@ -18,7 +23,9 @@ module.exports = {
     //   type: Date, 
     //   defaultTo: Date.now 
     // },
-    owner    : { model: 'User' },
+    owner    : {
+      model: 'User'
+    },
     exercises: {
       collection: 'Exercise',
       via: 'workOut'
