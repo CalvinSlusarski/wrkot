@@ -2,7 +2,7 @@ import {EditData} from './edit-data';
 import {DialogService} from 'aurelia-dialog';
 // import {dataServices} from 'data-services';
 
-export class DemoWkOut{
+export class WkOut{
   static inject = [DialogService];
 
 
@@ -39,14 +39,15 @@ export class DemoWkOut{
     this.theList.push(newExercise);
     this.workout.exercises = this.theList;
     console.log(this.workout);
-    // $.ajax({
-    //   type: "PUT",
-    //   url: 'workout/'+ this.id,
-    //   data: JSON.stringify(this.workout),
-    //   dataType: 'json'
-    // }).then(function(d) { 
-    //   console.log(d) 
-    // });
+    $.ajax({
+      type: "PUT",
+      url: 'workout/'+ this.id,
+      data: JSON.stringify(this.workout),
+      dataType: 'json'
+    }).then(function(d) { 
+      console.log(d) 
+    });
+    
   }
   removeExercise = function(item,detail){
     const index = item.details.indexOf(detail);
