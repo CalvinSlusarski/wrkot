@@ -14,6 +14,7 @@ module.exports = {
   attributes: {
     name: {
       //required: true,
+      notEmpty: true,
       type: 'string'
     },
     comment: {
@@ -24,6 +25,8 @@ module.exports = {
     //   defaultTo: Date.now 
     // },
     owner    : {
+      notEmpty: true,
+      //undefined: false,
       model: 'User'
     },
     exercises: {
