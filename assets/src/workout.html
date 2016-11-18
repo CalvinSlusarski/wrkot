@@ -19,15 +19,15 @@
                     <i class="material-icons">add</i>
                     </button>
                 </div>
-                <div class="mdl-card__actions mdl-card--border" repeat.for="serie of item.series">
+                <div class="mdl-card__actions mdl-card--border" repeat.for="set of item.sets">
                     <a class="mdl-button mdl-button--colored mdl-js-button">
-                      <span click.delegate="changeWeight(serie)">${serie.weight} </span> - 
-                      <span click.delegate="changeSet(serie)">${serie.sets} </span> X 
-                      <span click.delegate="changeRep(serie)">${serie.reps} </span>
+                      <span click.delegate="changeWeight(set)">${set.weight} </span> - 
+                      <span click.delegate="changeSet(set)">${set.sets} </span> X 
+                      <span click.delegate="changeRep(set)">${set.reps} </span>
                     </a>
                     <div class="mdl-layout-spacer"></div>
                     
-                    <i class="material-icons" click.delegate="removeExercise(item, serie)">delete</i>
+                    <i class="material-icons" click.delegate="removeExercise(item, set)">delete</i>
 
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
@@ -77,12 +77,12 @@
               </tr>
           </thead>
           <tbody repeat.for="item of theList">
-            <tr repeat.for="series of item.seriess">
+            <tr repeat.for="sets of item.setss">
                 <td>
                     <span if.bind="$index == 0">${item.lift}</span>
                 </td>
                 <td>
-                    <span> - ${series.weight} - ${series.sets} X ${series.reps}</span>
+                    <span> - ${sets.weight} - ${sets.sets} X ${sets.reps}</span>
                 </td>
             </tr>   
           </tbody>
