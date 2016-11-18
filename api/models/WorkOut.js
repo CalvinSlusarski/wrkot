@@ -26,7 +26,6 @@ module.exports = {
     // },
     owner    : {
       notEmpty: true,
-      //undefined: false,
       model: 'User'
     },
     exercises: {

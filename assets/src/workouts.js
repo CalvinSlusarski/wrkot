@@ -3,7 +3,7 @@ import {DialogService} from 'aurelia-dialog';
 import { Router } from 'aurelia-router';
 // import {dataServices} from 'data-services';
 //@inject(Router)
-export class WorkOuts{
+export class Workouts{
   static inject = [DialogService];
   static inject = [Router];
 
@@ -27,6 +27,6 @@ export class WorkOuts{
      });
   }
   navTo = function(item){
-    this.router.navigate('/workout/:' + item.id);
+    this.router.navigate('/workout/' + item.id);
   }
 }
