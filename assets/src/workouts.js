@@ -26,6 +26,32 @@ export class Workouts{
       that.theList = mapped;
      });
   }
+  removeWorkout = function(item){
+    const index = this.theList.indexOf(item);
+    let that = this;
+    $.ajax({
+      type: "DELETE",
+      url: '/workout/' + item.id,
+    }).then(function(data){
+  
+      setTimeout( () => {
+        that.theListsplice(index, 1);
+      },0);
+    });
+  }
+  addWorkout = function(){
+    let that = this;
+    let newWorkout = {name: 'New', comment: '' };
+    $.ajax({
+      type: "POST",
+      url: '/workout',
+      data: newWorkout,
+      dataType: 'json'
+    }).then(function(workout) { 
+      that.theList.push(workout)
+    });
+
+  }
   navTo = function(item){
     this.router.navigate('/workout/' + item.id);
   }
