@@ -8,60 +8,67 @@ export class Workout{
 
   heading = 'Workout';
   theList = [];
-  // theList = [{name: 'Back squat', series:[{weight: 'BAR', unit: 'imperial',sets: 3, reps: 10},{weight: '135', unit: 'imperial',sets: 2, reps: 10},{weight: '155', unit: 'imperial',sets: 2, reps: 10}]},
-  //               {lift: 'Hack squat', details:[{weight: 'BAR', unit: 'imperial',sets: 3, reps: 10},{weight: '135', unit: 'imperial',sets: 2, reps: 10}]}];
   id = '';
   workout = {};
   constructor(dialogService) {
     this.dialogService = dialogService;
     let that = this;
-    // $.getJSON('workout').then(function(d){ 
-    //   // console.log(d);
-    //   // console.log(d);
-    //   // console.log(d[5].exercises);
-    //   // console.log(that.theList);
-    //   // that.heading = d.name || '';
-    //   // that.theList = d[5].exercises || [];
-    //   // that.id = d[5]._id;
-    //   // that.workout = d[5];
-    //   that.theList = d;
-    //  });
-        //console.log(param.id);
-    // this.getWorkout(19).then(function(data) { 
-    //   console.log('$$$$$$$$$$$$$$$');
-    //   that.setWorkout(data); 
-    // });
   }
 
-  addRep = function(item){
-      let newRep = {weight: 'BAR', unit: 'imperial',sets: 3, reps: 10};
-      item.series.push(newRep);
-  }
-
-  addExercise = function(){
+  addSet= function(item){
     let that = this;
-    let newExercise = {name: 'New', sets: 0, reps: 0, weight: 0};
+    let newSet = {name: 'New', sets: 0, reps: 0, weight: 0, exercise: item.id};
     $.ajax({
       type: "POST",
-      url: 'exercises/',
-      data: JSON.stringify(newExercise),
+      url: '/set',
+      data: newSet,
+      // success: function(d) { console.log(d) },
+      dataType: 'json'
+    }).then(function(data){
+      item.sets.push(newSet);
+    });
+  }
+
+  addWorkout = function(){
+    let that = this;
+    let newExercise = {name: 'New', workOut: that.workout.id};
+    $.ajax({
+      type: "POST",
+      url: '/exercise',
+      data: newExercise,
       dataType: 'json'
     }).then(function(exercise) { 
-      this.theList.push(exercise)
+      that.theList.push(exercise)
     });
 
   }
-  removeExercise = function(item,detail){
-    const index = item.details.indexOf(detail);
-    setTimeout( () => {
-      item.details.splice(index, 1);
-    },0);
+  removeSet = function(item,detail){
+    const index = item.sets.indexOf(detail);
+    $.ajax({
+      type: "DELETE",
+      url: '/set/' + detail.id,
+    }).then(function(data){
+  
+      setTimeout( () => {
+        item.details.splice(index, 1);
+      },0);
+    });
+
   }
   changeExcercise = function(item){
-    this.dialogService.open({ viewModel: EditData, model: {title: 'Exercise Name', input: item.lift}}).then(response => {
+    let that = this;
+    this.dialogService.open({ viewModel: EditData, model: {title: 'Exercise Name', input: item.name}}).then(response => {
       if (!response.wasCancelled) {
-        item.lift = response.output;
-        console.log('good - ', response.output);
+        item.name = response.output;
+        //console.log('good - ', response.output);
+        $.ajax({
+          type: "PUT",
+          url: '/exercise/'+ item.id,
+          data: item,
+          dataType: 'json'
+        }).then(function(exercise) { 
+          //that.theList.push(exercise)
+        });
       } else {
         // console.log('bad');
       }
@@ -69,10 +76,12 @@ export class Workout{
     });
   }
   changeWeight = function(detail){
+    let that = this;
     this.dialogService.open({ viewModel: EditData, model: {title: 'Weight', input: detail.weight}}).then(response => {
     if (!response.wasCancelled) {
         detail.weight = response.output;
         console.log('good - ', response.output);
+        that.updateSet(detail);
       } else {
         // console.log('bad');
       }
@@ -80,10 +89,12 @@ export class Workout{
     });
   }
   changeSet = function(detail){
+    let that = this;
     this.dialogService.open({ viewModel: EditData, model: {title: 'Sets', input: detail.sets}}).then(response => {
     if (!response.wasCancelled) {
         detail.sets = response.output;
         console.log('good - ', response.output);
+        that.updateSet(detail);
       } else {
         // console.log('bad');
       }
@@ -91,37 +102,59 @@ export class Workout{
     });
   }
   changeRep = function(detail){
+    let that = this;
     this.dialogService.open({ viewModel: EditData, model: {title: 'Reps', input: detail.reps}}).then(response => {
     if (!response.wasCancelled) {
         detail.reps = response.output;
         console.log('good - ', response.output);
+        that.updateSet(detail);
       } else {
         // console.log('bad');
       }
       //console.log(response.output);
     });
   }
+  updateSet = function(set){
+    $.ajax({
+      type: "PUT",
+      url: '/set/'+ set.id,
+      data: set,
+      // success: function(d) { console.log(d) },
+      dataType: 'json'
+    }).then(function(data){
+      //item.sets.push(newSet);
+      console.log('good - ', data);
+    });
+  }
   getWorkout = function(id){
     return $.getJSON('/workOut/' + id);
   }
-  setWorkout = function(data){
-     console.log('$$$$$$$$$$$$$$$');
-    this.workout = data;
-    console.log(this.theList);
-    this.theList = data.exercises;
-    console.log(data);
-    console.log(this.theList);
+  getExercise = function(id){
+    return $.getJSON('/exercise/' + id);
   }
-  attached = function(param){
+  setWorkout = function(data){
+    let that = this;
+    this.workout = data;
+    $.each(data.exercises,function(index, exercise){
+        if(exercise.sets === undefined){
+          exercise.set = [];
+          console.log(exercise);
+          that.getExercise(exercise.id).then(function(data){
+            exercise.sets = data.sets;
+            console.log(that.theList);
+          });
+        }
+    });
+    this.theList = data.exercises;
+    
+  }
+  activate = function(param){
     console.log(param.id);
     let that = this;
-    this.getWorkout(19).then(function(data) { 
-      console.log('$$$$$$$$$$$$$$$');
-      that.setWorkout(data); 
-    });
+
     this.getWorkout(param.id).then(function(data) { 
-      console.log('$$$$$$$$$$$$$$$');
-      this.setWorkout(data); 
+
+      that.setWorkout(data); 
     });
     return true;
   } 
