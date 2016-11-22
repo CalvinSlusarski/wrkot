@@ -25,6 +25,9 @@ export class Workout{
       // success: function(d) { console.log(d) },
       dataType: 'json'
     }).then(function(data){
+      if(item.sets === undefined){
+        item.sets = [];
+      }
       item.sets.push(newSet);
     });
   }
