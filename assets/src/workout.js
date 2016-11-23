@@ -53,7 +53,7 @@ export class Workout{
     }).then(function(data){
   
       setTimeout( () => {
-        item.details.splice(index, 1);
+        item.sets.splice(index, 1);
       },0);
     });
 
