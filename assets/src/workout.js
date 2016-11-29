@@ -23,7 +23,6 @@ export class Workout{
       type: "POST",
       url: '/set',
       data: newSet,
-      // success: function(d) { console.log(d) },
       dataType: 'json'
     }).then(function(data){
       if(item.sets === undefined){
@@ -154,7 +153,7 @@ export class Workout{
     let that = this;
     this.workout = data;
     this.date = moment(data.createdAt).format('lll');
-    
+
     $.each(data.exercises,function(index, exercise){
         if(exercise.sets === undefined){
           exercise.set = [];

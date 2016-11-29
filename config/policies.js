@@ -53,4 +53,9 @@ module.exports.policies = {
 		// before letting any users feed our rabbits
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
+  // workout: {
+  //   // '*': [
+  //   //   'PermissionPolicy'
+  //   // ],
+  // }
 };
