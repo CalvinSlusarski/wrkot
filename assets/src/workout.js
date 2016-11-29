@@ -10,6 +10,7 @@ export class Workout{
   theList = [];
   id = '';
   workout = {};
+  date = '';
   constructor(dialogService) {
     this.dialogService = dialogService;
     let that = this;
@@ -48,7 +49,7 @@ export class Workout{
   removeSet = function(item,detail){
     const index = item.sets.indexOf(detail);
     $.ajax({
-      type: "DELETE",
+      type: 'DELETE',
       url: '/set/' + detail.id,
     }).then(function(data){
   
@@ -58,14 +59,28 @@ export class Workout{
     });
 
   }
-  changeExcercise = function(item){
+  removeExercise = function(item){
+    let that = this;
+    const index = that.theList.indexOf(item);
+    $.ajax({
+      type: 'DELETE',
+      url: '/exercise/' + item.id,
+    }).then(function(data){
+  
+      setTimeout( () => {
+        that.theList.splice(index, 1);
+      },0);
+    });
+
+  }
+  changeExercise = function(item){
     let that = this;
     this.dialogService.open({ viewModel: EditData, model: {title: 'Exercise Name', input: item.name}}).then(response => {
       if (!response.wasCancelled) {
         item.name = response.output;
         //console.log('good - ', response.output);
         $.ajax({
-          type: "PUT",
+          type: 'PUT',
           url: '/exercise/'+ item.id,
           data: item,
           dataType: 'json'
@@ -119,7 +134,7 @@ export class Workout{
   }
   updateSet = function(set){
     $.ajax({
-      type: "PUT",
+      type: 'PUT',
       url: '/set/'+ set.id,
       data: set,
       // success: function(d) { console.log(d) },
@@ -138,6 +153,8 @@ export class Workout{
   setWorkout = function(data){
     let that = this;
     this.workout = data;
+    this.date = moment(data.createdAt).format('lll');
+    
     $.each(data.exercises,function(index, exercise){
         if(exercise.sets === undefined){
           exercise.set = [];
@@ -150,6 +167,9 @@ export class Workout{
     });
     this.theList = data.exercises;
     
+  }
+  formateDate = function(date){
+    return moment(date).format('lll');
   }
   activate = function(param){
     console.log(param.id);
